@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -13,13 +14,18 @@ import java.util.List;
 @Setter
 @Getter
 @Table(name="employees")
-public class Employee {
+public class Employee  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment ID
-    private Integer employeeId;
+    private Long employeeId;
+    private String name;
+    private String email;
+    private String phone;
+    private String address;
+    private String city;
+    private String country;
+    private Date hireDate;
 
-    private String firstName;
-    private String lastName;
     private String title;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
