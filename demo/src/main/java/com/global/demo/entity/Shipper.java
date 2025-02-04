@@ -1,4 +1,4 @@
-package com.global.demo.entity.shipping;
+package com.global.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,29 +21,23 @@ public class Shipper {
     private String name;
 
 
-    @Column(name = "email")
+    @Column(name = "email",nullable = false)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password",nullable = false)
     private String password;
-    @Column(name = "Phone")
+    @Column(name = "Phone",nullable = false)
     private String phone;
 
     @Column(name = "companyName")
     private String companyName;
 
-    @Column(name = "shippingCount")
-    private int shippingCount;
 
     @Column(name = "shippingRate")
     private double shippingRate;
 
-    @ManyToOne
-    @JoinColumn(name = "shippingCompanyId")
-    private ShippingCompany shippingCompany;
+    @Column(name="locationNow")
+    private String locationNow;
 
-    @OneToMany(
-            mappedBy = "shipper"
-            ,cascade = CascadeType.ALL)
-    private List<ShippingAddress> shippingAddresses;
+
 }

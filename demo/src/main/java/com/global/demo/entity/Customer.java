@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Data
 @Entity
 @Setter
@@ -15,13 +17,14 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    private String companyName;
     private String contactName;
     private String address;
     private String city;
-    private String phoneNumber;
+    private String phone;
     private String email;
+    
 
-
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<Order> orders;
 }
 
