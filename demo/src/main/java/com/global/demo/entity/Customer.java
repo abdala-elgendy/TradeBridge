@@ -26,5 +26,8 @@ public class Customer {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<Order> orders;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Favorite> favorites;
 }
 
