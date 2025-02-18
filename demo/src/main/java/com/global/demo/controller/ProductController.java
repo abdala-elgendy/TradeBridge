@@ -25,18 +25,19 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
-//    @GetMapping("/{id}")
-//    public ProductDTO getProductById(@PathVariable Long id) {
-//        return productService.getProductById(id);
-//    }
-//
-//    @PutMapping("/{id}")
-//    public ProductDTO updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
-//        return productService.updateProduct(id, productDTO);
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public void deleteProduct(@PathVariable Long id) {
-//        productService.deleteProduct(id);
-//    }
+    @GetMapping("/{id}")
+    public ProductDTO getProductById(@PathVariable Long id) {
+        return productService.getProductById(id);
+    }
+
+    @PutMapping("/{id}")
+    public ProductDTO updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
+        return productService.updateProduct(id, productDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+    }
+
     }

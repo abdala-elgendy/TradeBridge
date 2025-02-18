@@ -29,4 +29,27 @@ public class ProductService {
         List<ProductDTO> productDTOList = productMapper.toProductDTOList(productRepository.findAll());
         return productDTOList;
     }
+
+    public ProductDTO getProductById(Long id) {
+        Product product = productRepository.findById(id).orElse(null);
+        return productMapper.toProductDTO(product);
+    }
+
+    public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
+        Product product = productMapper.toProduct(productDTO);
+
+        product = productRepository.save(product);
+        return productMapper.toProductDTO(product);
+    }
+
+    public String deleteProduct(Long id) {
+        try{
+            productRepository.deleteById(id);
+        }
+        catch (Exception e){
+            return "Product not found";
+        }
+
+        return "Product deleted successfully";
+    }
 }
