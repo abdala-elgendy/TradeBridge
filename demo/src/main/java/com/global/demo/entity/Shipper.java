@@ -39,5 +39,7 @@ public class Shipper {
     @Column(name="locationNow")
     private String locationNow;
 
+     @OneToMany(mappedBy = "shipper", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Order> orders;
 
 }
