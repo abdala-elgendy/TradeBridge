@@ -27,14 +27,14 @@ public class OrderItemService {
         Optional<OrderItem> orderItem = orderItemRepository.findById(id);
         return orderItem.orElse(null);
     }
-
-    public OrderItem updateOrderItem(Long id, OrderItem orderItem) {
-        if (orderItemRepository.existsById(id)) {
-            orderItem.setId(id);
-            return orderItemRepository.save(orderItem);
-        }
-        return null;
-    }
+//
+//    public OrderItem updateOrderItem(Long id, OrderItem orderItem) {
+//        if (orderItemRepository.existsById(id)) {
+//            orderItem.setId(id);
+//            return orderItemRepository.save(orderItem);
+//        }
+//        return orderItem;
+//    }
 
     public void deleteOrderItem(Long id) {
         orderItemRepository.deleteById(id);

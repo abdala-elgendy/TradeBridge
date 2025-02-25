@@ -1,16 +1,16 @@
 package com.global.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
 @Entity
-@Setter
 @Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="orders")
 public class Order {
     @Id
@@ -31,6 +31,9 @@ public class Order {
     private String shipCity;
 
 
+    @ManyToOne
+    @JoinColumn(name = "shipper_id")
+    private Shipper shipper;
 
     // Getters, setters, and constructors
 }

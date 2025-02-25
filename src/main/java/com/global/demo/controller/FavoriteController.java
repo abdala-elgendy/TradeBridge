@@ -20,7 +20,7 @@ public class FavoriteController {
         return favoriteService.addFavorite(favorite);
     }
 
-    @GetMapping
+    @GetMapping("/allmyfavorites")
     public List<Favorite> getAllFavorites() {
         return favoriteService.getAllFavorites();
     }

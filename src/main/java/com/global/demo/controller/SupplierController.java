@@ -20,7 +20,7 @@ public class SupplierController {
         return supplierService.addSupplier(supplier);
     }
 
-    @GetMapping
+    @GetMapping("/allsuppliers")
     public List<Supplier> getAllSuppliers() {
         return supplierService.getAllSuppliers();
     }
@@ -30,10 +30,10 @@ public class SupplierController {
         return supplierService.getSupplierById(id);
     }
 
-    @PutMapping("/{id}")
-    public Supplier updateSupplier(@PathVariable Long id, @RequestBody Supplier supplier) {
-        return supplierService.updateSupplier(id, supplier);
-    }
+//    @PutMapping("/{id}")
+//    public Supplier updateSupplier(@PathVariable Long id, @RequestBody Supplier supplier) {
+//        return supplierService.updateSupplier(id, supplier);
+//    }
 
     @DeleteMapping("/{id}")
     public void deleteSupplier(@PathVariable Long id) {

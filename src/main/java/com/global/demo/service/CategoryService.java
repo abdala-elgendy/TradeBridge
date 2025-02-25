@@ -27,14 +27,14 @@ public class CategoryService {
         Optional<Category> category = categoryRepository.findById(id);
         return category.orElse(null);
     }
-
-    public Category updateCategory(Long id, Category category) {
-        if (categoryRepository.existsById(id)) {
-            category.setId(id);
-            return categoryRepository.save(category);
-        }
-        return null;
-    }
+//
+//    public Category updateCategory(Long id, Category category) {
+//        if (categoryRepository.existsById(id)) {
+//            category.setId(id);
+//            return categoryRepository.save(category);
+//        }
+//        return category;
+//    }
 
     public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);

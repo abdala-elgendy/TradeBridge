@@ -18,7 +18,7 @@ import java.util.List;
 public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @Column(name = "name")
     private String name;

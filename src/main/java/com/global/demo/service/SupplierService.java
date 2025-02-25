@@ -28,13 +28,13 @@ public class SupplierService {
         return supplier.orElse(null);
     }
 
-    public Supplier updateSupplier(Long id, Supplier supplier) {
-        if (supplierRepository.existsById(id)) {
-            supplier.setId(id);
-            return supplierRepository.save(supplier);
-        }
-        return null;
-    }
+//    public Supplier updateSupplier(Long id, Supplier supplier) {
+//        if (supplierRepository.existsById(id)) {
+//            supplier.setId(id);
+//            return supplierRepository.save(supplier);
+//        }
+//        return supplier;
+//    }
 
     public void deleteSupplier(Long id) {
         supplierRepository.deleteById(id);

@@ -1,16 +1,17 @@
 package com.global.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Table(name="shippers")
+@Entity
+@Getter
+@Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name="shippers")
 public class Shipper {
 
     @Id

@@ -24,10 +24,10 @@ public class Customer {
     private String email;
     
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "Favorite", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Favorite> favorites;
 }
 
