@@ -2,7 +2,7 @@ package com.global.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.userdetails.User;
+
 
 import java.sql.Date;
 
