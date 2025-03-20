@@ -1,4 +1,4 @@
-package com.global.demo.model.entity;
+package com.global.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @MappedSuperclass
 public abstract class BaseRoleEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

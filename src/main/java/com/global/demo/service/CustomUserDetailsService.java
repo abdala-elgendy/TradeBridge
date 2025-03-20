@@ -1,6 +1,5 @@
 package com.global.demo.service;
 
-import com.global.demo.model.entity.User;
 import com.global.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

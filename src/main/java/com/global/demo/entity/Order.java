@@ -1,5 +1,7 @@
 package com.global.demo.entity;
 
+import com.global.demo.entity.Customer;
+import com.global.demo.entity.Shipper;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,6 +37,4 @@ public class Order {
     @JoinColumn(name = "shipper_id")
     private Shipper shipper;
 
-    // Getters, setters, and constructors
 }
-

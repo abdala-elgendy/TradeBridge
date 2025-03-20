@@ -2,7 +2,7 @@
 package com.global.demo.service;
 
 import com.global.demo.entity.Supplier;
-import com.global.demo.repository.SupplierRepo;
+import com.global.demo.repository.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.Optional;
 public class SupplierService {
 
     @Autowired
-    private SupplierRepo supplierRepository;
+    private SupplierRepository supplierRepository;
 
     public Supplier addSupplier(Supplier supplier) {
         return supplierRepository.save(supplier);
