@@ -1,48 +1,38 @@
 package com.global.demo.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import jakarta.persistence.Column;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-
+@Data
 @Entity
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name="suppliers")
-public class Supplier {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "name")
-    private String name;
-
-
-    @Column(name = "email",nullable = false)
-    private String email;
-
-    @Column(name = "password",nullable = false)
-    private String password;
-
-    @Column(name = "Phone",nullable = false)
-    private String phone;
-
-    @Column(name = "companyName")
+@Table(name = "suppliers")
+@EqualsAndHashCode(callSuper = true)
+public class Supplier extends BaseRoleEntity {
+    
+    @Column(name = "company_name")
     private String companyName;
-
-
+    
+    @Column(name = "business_registration_number")
+    private String businessRegistrationNumber;
+    
+    @Column(name = "tax_id")
+    private String taxId;
+    
+    @Column(name = "warehouse_address")
+    private String warehouseAddress;
+    
+    @Column(name = "contact_person")
+    private String contactPerson;
+    
+    @Column(name = "contact_phone")
+    private String contactPhone;
+    
     @Column(name = "rating")
-    private double rating;
-
-    @Column(name="locationNow")
-    private String locationNow;
-
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Product> products = new ArrayList<>();
-}
+    private Double rating = 0.0;
+    
+    @Column(name = "total_products")
+    private Integer totalProducts = 0;
+} 

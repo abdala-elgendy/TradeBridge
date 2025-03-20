@@ -1,9 +1,6 @@
-package com.global.demo.model.entity;
+package com.global.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,45 +19,54 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "First name is required")
-    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
-    @Column(name = "first_name")
-    private String firstName;
-
-    @NotBlank(message = "Last name is required")
-    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
-    @Column(name = "last_name")
-    private String lastName;
-
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
-    @Column(unique = true)
+    @Column(nullable = false, unique = true,name = "email")
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @Column(nullable = false,name = "first_name")
+    private String firstName;
 
-    @Column(name = "is_enabled")
-    private boolean enabled = false;
+    @Column(nullable = false,name = "last_name")
+    private String lastName;
 
-    @Column(name = "verification_token")
+    @Column(name="verification_token")
     private String verificationToken;
 
+    @Column(nullable = false, unique = true)
+    private String nationalId;
+
+    @Column(nullable = false, unique = true,name = "phone_number")
+    private String phoneNumber;
+
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    @Column(nullable = false,name="role")
+    private Role role;
+
+    @Column(nullable = false,name="enabled")
+    private boolean enabled = true;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Customer customer;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Supplier supplier;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Shipper shipper;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Admin admin;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override

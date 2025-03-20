@@ -1,46 +1,38 @@
 package com.global.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
+@Data
 @Entity
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name="shippers")
-public class Shipper {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
-
-    @Column(name = "name")
-    private String name;
-
-
-    @Column(name = "email",nullable = false)
-    private String email;
-
-    @Column(name = "password",nullable = false)
-    private String password;
-    @Column(name = "Phone",nullable = false)
-    private String phone;
-
-    @Column(name = "companyName")
+@Table(name = "shippers")
+@EqualsAndHashCode(callSuper = true)
+public class Shipper extends BaseRoleEntity {
+    
+    @Column(name = "company_name")
     private String companyName;
-
+    
+    @Column(name = "service_area")
+    private String serviceArea;
+    
+    @Column(name = "vehicle_type")
+    private String vehicleType;
 
     @Column(name = "shippingRate")
     private double shippingRate;
 
     @Column(name="locationNow")
     private String locationNow;
+    
+    @Column(name = "total_deliveries")
+    private Integer totalDeliveries = 0;
+    
+    @Column(name = "is_available")
+    private boolean available = true;
 
-     @OneToMany(mappedBy = "shipper", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "shipper", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Order> orders;
-
-}
+} 
