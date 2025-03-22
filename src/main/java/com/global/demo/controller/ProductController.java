@@ -14,7 +14,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-
     @PostMapping("/add")
     public ProductDTO addProduct(@RequestBody ProductDTO productDTO) {
         return productService.addProduct(productDTO);
@@ -40,4 +39,4 @@ public class ProductController {
         productService.deleteProduct(id);
     }
 
-    }
+}

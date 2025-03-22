@@ -31,4 +31,4 @@ public class AuthenticationController {
     public ResponseEntity<AuthResponse> verifyEmail(@RequestParam String token) {
         return ResponseEntity.ok(authenticationService.verifyEmail(token));
     }
-} 
+}

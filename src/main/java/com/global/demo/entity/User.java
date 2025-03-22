@@ -24,32 +24,32 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true,name = "email")
+    @Column(nullable = false, unique = true, name = "email")
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(nullable = false,name = "first_name")
+    @Column(nullable = false, name = "first_name")
     private String firstName;
 
-    @Column(nullable = false,name = "last_name")
+    @Column(nullable = false, name = "last_name")
     private String lastName;
 
-    @Column(name="verification_token")
+    @Column(name = "verification_token")
     private String verificationToken;
 
     @Column(nullable = false, unique = true)
     private String nationalId;
 
-    @Column(nullable = false, unique = true,name = "phone_number")
+    @Column(nullable = false, unique = true, name = "phone_number")
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false,name="role")
+    @Column(nullable = false, name = "role")
     private Role role;
 
-    @Column(nullable = false,name="enabled")
+    @Column(nullable = false, name = "enabled")
     private boolean enabled = true;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
@@ -93,4 +93,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
-} 
+}

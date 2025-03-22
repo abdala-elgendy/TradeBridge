@@ -43,10 +43,9 @@ public class ProductService {
     }
 
     public String deleteProduct(Long id) {
-        try{
+        try {
             productRepository.deleteById(id);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return "Product not found";
         }
 

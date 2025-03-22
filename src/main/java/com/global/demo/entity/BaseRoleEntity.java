@@ -36,4 +36,4 @@ public abstract class BaseRoleEntity {
     protected void onUpdate() {
         updatedAt = java.time.LocalDateTime.now();
     }
-} 
+}

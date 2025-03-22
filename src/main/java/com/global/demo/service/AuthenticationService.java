@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    
+
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final SupplierRepository supplierRepository;
@@ -31,70 +31,58 @@ public class AuthenticationService {
     @Transactional
     public AuthResponse register(RegisterRequest request) throws Exception {
         if (userRepository.existsByEmail(request.getEmail())) {
-            return AuthResponse.builder()
-                    .success(false)
-                    .message("Email already registered")
-                    .build();
+            return AuthResponse.builder().success(false).message("Email already registered").build();
         }
 
         if (userRepository.existsByNationalId(request.getNationalId())) {
-            return AuthResponse.builder()
-                    .success(false)
-                    .message("National ID already registered")
-                    .build();
+            return AuthResponse.builder().success(false).message("National ID already registered").build();
         }
 
         // Create base user
-        var user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .nationalId(request.getNationalId())
-                .phoneNumber(request.getPhoneNumber())
-                .role(request.getRole() != null ? request.getRole() : Role.USER)
-                .enabled(false)
-                .verificationToken(UUID.randomUUID().toString())
-                .build();
+        var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName())
+                .email(request.getEmail()).password(passwordEncoder.encode(request.getPassword()))
+                .nationalId(request.getNationalId()).phoneNumber(request.getPhoneNumber())
+                .role(request.getRole() != null ? request.getRole() : Role.USER).enabled(false)
+                .verificationToken(UUID.randomUUID().toString()).build();
 
         switch (request.getRole()) {
-            case CUSTOMER -> {
-                Customer customer = new Customer();
-                customer.setShippingAddress(request.getShippingAddress());
-                customer.setBillingAddress(request.getBillingAddress());
-                customer.setPreferredPaymentMethod(request.getPreferredPaymentMethod());
-                customer.setUser(user);
-                user.setCustomer(customer);
-                customerRepository.save(customer);
-            }
-            case SUPPLIER -> {
-                Supplier supplier = new Supplier();
-                supplier.setCompanyName(request.getCompanyName());
-                supplier.setBusinessRegistrationNumber(request.getBusinessRegistrationNumber());
-                supplier.setTaxId(request.getTaxId());
-                supplier.setWarehouseAddress(request.getWarehouseAddress());
-                supplier.setContactPerson(request.getContactPerson());
-                supplier.setContactPhone(request.getContactPhone());
-                supplier.setUser(user);
-                user.setSupplier(supplier);
-                supplierRepository.save(supplier);
-            }
-            case SHIPPER -> {
-                Shipper shipper = new Shipper();
-                shipper.setServiceArea(request.getServiceArea());
-                shipper.setVehicleType(request.getVehicleType());
-                shipper.setUser(user);
-                user.setShipper(shipper);
-                shipperRepository.save(shipper);
-            }
-            case ADMIN -> {
-                Admin admin = new Admin();
-                admin.setDepartment(request.getDepartment());
-                admin.setAccessLevel(request.getAccessLevel());
-                admin.setUser(user);
-                user.setAdmin(admin);
-                adminRepository.save(admin);
-            }
+        case CUSTOMER -> {
+            Customer customer = new Customer();
+            customer.setShippingAddress(request.getShippingAddress());
+            customer.setBillingAddress(request.getBillingAddress());
+            customer.setPreferredPaymentMethod(request.getPreferredPaymentMethod());
+            customer.setUser(user);
+            user.setCustomer(customer);
+            customerRepository.save(customer);
+        }
+        case SUPPLIER -> {
+            Supplier supplier = new Supplier();
+            supplier.setCompanyName(request.getCompanyName());
+            supplier.setBusinessRegistrationNumber(request.getBusinessRegistrationNumber());
+            supplier.setTaxId(request.getTaxId());
+            supplier.setWarehouseAddress(request.getWarehouseAddress());
+            supplier.setContactPerson(request.getContactPerson());
+            supplier.setContactPhone(request.getContactPhone());
+            supplier.setUser(user);
+            user.setSupplier(supplier);
+            supplierRepository.save(supplier);
+        }
+        case SHIPPER -> {
+            Shipper shipper = new Shipper();
+            shipper.setServiceArea(request.getServiceArea());
+            shipper.setVehicleType(request.getVehicleType());
+            shipper.setUser(user);
+            user.setShipper(shipper);
+            shipperRepository.save(shipper);
+        }
+        case ADMIN -> {
+            Admin admin = new Admin();
+            admin.setDepartment(request.getDepartment());
+            admin.setAccessLevel(request.getAccessLevel());
+            admin.setUser(user);
+            user.setAdmin(admin);
+            adminRepository.save(admin);
+        }
         }
 
         // Send verification email
@@ -103,49 +91,31 @@ public class AuthenticationService {
         try {
             userRepository.save(user);
         } catch (Exception e) {
-            return AuthResponse.builder()
-                    .success(false)
-                    .message("Failed to register user")
-                    .build();
+            return AuthResponse.builder().success(false).message("Failed to register user").build();
         }
 
-        return AuthResponse.builder()
-                .success(true)
-                .message("Registration successful. Please check your email to verify your account.")
-                .build();
+        return AuthResponse.builder().success(true)
+                .message("Registration successful. Please check your email to verify your account.").build();
     }
 
     public AuthResponse login(LoginRequest request) {
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getEmail(),
-                            request.getPassword()
-                    )
-            );
+            authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
             var user = userRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             if (!user.isEnabled()) {
-                return AuthResponse.builder()
-                        .success(false)
-                        .message("Please verify your email before logging in")
+                return AuthResponse.builder().success(false).message("Please verify your email before logging in")
                         .build();
             }
 
             var jwtToken = jwtService.generateToken(user);
 
-            return AuthResponse.builder()
-                    .success(true)
-                    .token(jwtToken)
-                    .message("Login successful")
-                    .build();
+            return AuthResponse.builder().success(true).token(jwtToken).message("Login successful").build();
         } catch (Exception e) {
-            return AuthResponse.builder()
-                    .success(false)
-                    .message("Invalid email or password")
-                    .build();
+            return AuthResponse.builder().success(false).message("Invalid email or password").build();
         }
     }
 
@@ -157,9 +127,6 @@ public class AuthenticationService {
         user.setVerificationToken(null);
         userRepository.save(user);
 
-        return AuthResponse.builder()
-                .success(true)
-                .message("Email verified successfully")
-                .build();
+        return AuthResponse.builder().success(true).message("Email verified successfully").build();
     }
-} 
+}

@@ -35,4 +35,4 @@ public class Admin extends BaseRoleEntity {
 
     @Column(name = "can_view_reports")
     private boolean canViewReports = false;
-} 
+}

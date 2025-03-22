@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="orders")
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,15 +23,12 @@ public class Order {
     @JoinColumn(name = "customerId")
     private Customer customer;
 
-
-
     private LocalDate orderDate;
     private LocalDate requiredDate;
     private LocalDate shippedDate;
 
     private String shipAddress;
     private String shipCity;
-
 
     @ManyToOne
     @JoinColumn(name = "shipper_id")

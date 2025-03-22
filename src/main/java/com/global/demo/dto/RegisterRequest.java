@@ -59,4 +59,4 @@ public class RegisterRequest {
     // Admin specific fields
     private String department;
     private String accessLevel;
-} 
+}

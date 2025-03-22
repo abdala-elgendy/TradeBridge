@@ -30,10 +30,10 @@ public class OrderItemController {
         return orderItemService.getOrderItemById(id);
     }
 
-//    @PutMapping("/{id}")
-//    public OrderItem updateOrderItem(@PathVariable Long id, @RequestBody OrderItem orderItem) {
-//        return orderItemService.updateOrderItem(id, orderItem);
-//    }
+    // @PutMapping("/{id}")
+    // public OrderItem updateOrderItem(@PathVariable Long id, @RequestBody OrderItem orderItem) {
+    // return orderItemService.updateOrderItem(id, orderItem);
+    // }
 
     @DeleteMapping("/{id}")
     public void deleteOrderItem(@PathVariable Long id) {

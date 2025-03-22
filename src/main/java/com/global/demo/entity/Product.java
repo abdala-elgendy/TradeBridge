@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="products")
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -19,11 +19,9 @@ public class Product {
     private int quantityInStock;
     private int discount;
 
-
     @ManyToOne
     @JoinColumn(name = "supplierId")
     private Supplier supplier;
-
 
     @ManyToOne
     @JoinColumn(name = "categoryId")

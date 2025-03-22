@@ -35,7 +35,7 @@ public class EmailService {
                         <body>
                             <h2>Email Verification</h2>
                             <p>Thank you for registering with our application.
-                             Please click the link below to verify 
+                             Please click the link below to verify
                              your email address:</p>
                             <p><a href="%s">Verify Email</a></p>
                             <p>If you didn't create an account, you can safely ignore this email.</p>

@@ -11,16 +11,16 @@ import java.util.List;
 @Table(name = "customers")
 @EqualsAndHashCode(callSuper = true)
 public class Customer extends BaseRoleEntity {
-    
+
     @Column(name = "shipping_address")
     private String shippingAddress;
-    
+
     @Column(name = "billing_address")
     private String billingAddress;
-    
+
     @Column(name = "preferred_payment_method")
     private String preferredPaymentMethod;
-    
+
     @Column(name = "loyalty_points")
     private Integer loyaltyPoints = 0;
 
@@ -29,4 +29,4 @@ public class Customer extends BaseRoleEntity {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Favorite> favorites;
-} 
+}
