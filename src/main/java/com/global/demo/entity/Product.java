@@ -75,5 +75,26 @@ public class Product {
         updatedAt = LocalDateTime.now();
     }
 
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
+    // Thread-safe methods for updating stock and total sold
+    public synchronized boolean updateStock(int quantity) {
+        if (quantity > 0 && this.stockQuantity >= quantity) {
+            this.stockQuantity -= quantity;
+            this.totalSold += quantity;
+            return true;
+        }
+        return false;
+    }
+
+    public synchronized boolean addToStock(int quantity) {
+        if (quantity > 0) {
+            this.stockQuantity += quantity;
+            return true;
+        }
+        return false;
+    }
 }
