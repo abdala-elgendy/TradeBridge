@@ -32,5 +32,4 @@ public class ProductReviewDTO {
 
     private Long productId;
     private Long customerId;
-    private String customerName;
 } 
