@@ -5,19 +5,19 @@ import com.global.demo.dto.ProductDTO;
 import com.global.demo.entity.Product;
 import com.global.demo.mapper.ProductMapper;
 import com.global.demo.repository.ProductRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
-    @Autowired
-    private ProductRepo productRepository;
-
-    @Autowired
-    private ProductMapper productMapper;
+    private final ProductRepo productRepository;
+    private final ProductMapper productMapper;
 
     public ProductDTO addProduct(ProductDTO productDTO) {
         Product product = productMapper.toProduct(productDTO);
@@ -50,5 +50,64 @@ public class ProductService {
         }
 
         return "Product deleted successfully";
+    }
+
+    @Transactional
+    public boolean updateStock(Long productId, int quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        try {
+            boolean updated = product.updateStock(quantity);
+            if (updated) {
+                productRepository.save(product);
+                return true;
+            }
+            return false;
+        } catch (OptimisticLockingFailureException e) {
+            // Retry logic can be implemented here if needed
+            throw new RuntimeException("Concurrent update detected. Please try again.");
+        }
+    }
+
+    @Transactional
+    public boolean addToStock(Long productId, int quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        try {
+            boolean updated = product.addToStock(quantity);
+            if (updated) {
+                productRepository.save(product);
+                return true;
+            }
+            return false;
+        } catch (OptimisticLockingFailureException e) {
+            // Retry logic can be implemented here if needed
+            throw new RuntimeException("Concurrent update detected. Please try again.");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ProductDTO getProduct(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        return convertToDTO(product);
+    }
+
+    private ProductDTO convertToDTO(Product product) {
+        return ProductDTO.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .stockQuantity(product.getStockQuantity())
+                .totalSold(product.getTotalSold())
+                .category(product.getCategory())
+                .brand(product.getBrand())
+                .weight(product.getWeight())
+                .weightUnit(product.getWeightUnit())
+                .supplierId(product.getSupplier().getId())
+                .build();
     }
 }
