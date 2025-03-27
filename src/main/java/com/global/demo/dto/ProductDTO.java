@@ -56,4 +56,22 @@ public class ProductDTO {
     private List<ProductReviewDTO> reviews;
     private Double averageRating;
     private Integer totalReviews;
+
+    // Thread-safe methods for updating stock and total sold
+    public synchronized boolean updateStock(int quantity) {
+        if (quantity > 0 && this.stockQuantity >= quantity) {
+            this.stockQuantity -= quantity;
+            this.totalSold += quantity;
+            return true;
+        }
+        return false;
+    }
+
+    public synchronized boolean addToStock(int quantity) {
+        if (quantity > 0) {
+            this.stockQuantity += quantity;
+            return true;
+        }
+        return false;
+    }
 }
