@@ -35,7 +35,6 @@ public class ProductDTO {
     @Min(value = 0, message = "Stock quantity cannot be negative")
     private Integer stockQuantity;
 
-
     private Integer totalSold;
 
     @NotBlank(message = "Category is required")
