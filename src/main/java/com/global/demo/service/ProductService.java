@@ -53,6 +53,34 @@ public class ProductService {
     }
 
     @Transactional
+    public boolean purchaseProduct(Long productId, int quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        try {
+            // Check if product is active
+            if (!product.isActive()) {
+                throw new RuntimeException("Product is not available for purchase");
+            }
+
+            // Check if enough stock is available
+            if (product.getStockQuantity() < quantity) {
+                throw new RuntimeException("Insufficient stock available");
+            }
+
+            // Update stock and total sold
+            boolean updated = product.updateStock(quantity);
+            if (updated) {
+                productRepository.save(product);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to process purchase: " + e.getMessage());
+        }
+    }
+
+    @Transactional
     public boolean updateStock(Long productId, int quantity) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -64,7 +92,7 @@ public class ProductService {
                 return true;
             }
             return false;
-        } catch (OptimisticLockingFailureException e) {
+        } catch (Exception e) {
             // Retry logic can be implemented here if needed
             throw new RuntimeException("Concurrent update detected. Please try again.");
         }
@@ -82,7 +110,7 @@ public class ProductService {
                 return true;
             }
             return false;
-        } catch (OptimisticLockingFailureException e) {
+        } catch (Exception e) {
             // Retry logic can be implemented here if needed
             throw new RuntimeException("Concurrent update detected. Please try again.");
         }
