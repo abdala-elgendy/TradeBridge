@@ -3,6 +3,7 @@ package com.global.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.math.BigDecimal;
 
 @Entity
 @Getter
@@ -25,6 +26,23 @@ public class OrderItem {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(nullable = false)
     private int quantity;
-    private int discount;
+
+    @Column(nullable = false)
+    private BigDecimal unitPrice;
+
+    @Column(nullable = false)
+    private BigDecimal discount = BigDecimal.ZERO;
+
+    @Version
+    private Long version;
+
+    @PrePersist
+    @PreUpdate
+    protected void validateQuantity() {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than 0");
+        }
+    }
 }
