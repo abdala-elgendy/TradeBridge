@@ -1,3 +1,4 @@
+You can see all details in this link https://deepwiki.com/abdala-elgendy/TradeBridge
 **Features**
 
  1- Product Management
