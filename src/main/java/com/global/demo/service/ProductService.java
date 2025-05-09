@@ -2,6 +2,7 @@
 package com.global.demo.service;
 
 import com.global.demo.dto.ProductDTO;
+import com.global.demo.dto.TopProductDTO;
 import com.global.demo.entity.Product;
 import com.global.demo.mapper.ProductMapper;
 import com.global.demo.repository.ProductRepo;
@@ -137,5 +138,9 @@ public class ProductService {
                 .weightUnit(product.getWeightUnit())
                 .supplierId(product.getSupplier().getId())
                 .build();
+    }
+
+    public List<TopProductDTO> getTopSellingProducts(int limit) {
+        return productRepository.findTopSellingProducts(limit);
     }
 }

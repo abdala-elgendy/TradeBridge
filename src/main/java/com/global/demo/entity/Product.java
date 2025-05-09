@@ -62,6 +62,8 @@ public class Product {
     @Column(nullable = false)
     private boolean isActive = true;
 
+    private int rate ;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;

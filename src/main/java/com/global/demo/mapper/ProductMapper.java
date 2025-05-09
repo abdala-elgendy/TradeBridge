@@ -2,6 +2,7 @@
 package com.global.demo.mapper;
 
 import com.global.demo.dto.ProductDTO;
+import com.global.demo.dto.TopProductDTO;
 import com.global.demo.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,4 +19,6 @@ public interface ProductMapper {
     Product toProduct(ProductDTO productDTO);
 
     List<ProductDTO> toProductDTOList(List<Product> all);
+
+    List<TopProductDTO> findTopSellingProducts(int limit);
 }

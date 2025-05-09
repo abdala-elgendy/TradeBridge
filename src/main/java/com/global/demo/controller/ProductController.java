@@ -1,6 +1,7 @@
 package com.global.demo.controller;
 
 import com.global.demo.dto.ProductDTO;
+import com.global.demo.dto.TopProductDTO;
 import com.global.demo.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -78,6 +79,12 @@ public class ProductController {
             @RequestParam int quantity) {
         boolean purchased = productService.purchaseProduct(id, quantity);
         return ResponseEntity.ok(purchased);
+    }
+
+    @GetMapping("/top-selling")
+    public List<TopProductDTO> getTopSellingProducts(
+            @RequestParam(defaultValue = "10") int limit) {
+        return productService.getTopSellingProducts(limit);
     }
 
     @ExceptionHandler(RuntimeException.class)
