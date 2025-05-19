@@ -1,0 +1,16 @@
+spring:
+      application :
+           name:Trade Bridge
+
+
+      datasource:
+         url: jdbc:mysql://localhost:3306/tradebridge?serverTimezone=UTC
+         username: springstudent
+         password: springstudent
+
+      jpa:
+        hibernate:
+          ddl-auto: update
+          how-sql: true
+          format_sql: true
+          database: mysql

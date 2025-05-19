@@ -1,0 +1,89 @@
+type Query {
+    orders: [Order]
+    order(id: ID!): Order
+    products: [Product]
+    product(id: ID!): Product
+}
+
+type Mutation {
+    createOrder(input: OrderInput!): Order
+    updateOrderStatus(id: ID!, status: OrderStatus!): Order
+    cancelOrder(id: ID!): Order
+}
+
+type Order {
+    id: ID!
+    customer: Customer
+    orderItems: [OrderItem]
+    orderDate: String!
+    requiredDate: String
+    shippedDate: String
+    totalAmount: Float!
+    status: OrderStatus!
+    shipAddress: String!
+    shipCity: String!
+    currentLocation: String
+    lastLocationUpdate: String
+    shipper: Shipper
+}
+
+type OrderItem {
+    id: ID!
+    order: Order
+    product: Product!
+    quantity: Int!
+    unitPrice: Float!
+    discount: Float!
+}
+
+type Product {
+    id: ID!
+    name: String!
+    description: String
+    price: Float!
+    stockQuantity: Int!
+    supplier: Supplier
+}
+
+type Customer {
+    id: ID!
+    name: String!
+    email: String!
+    shippingAddress: String
+    billingAddress: String
+}
+
+type Supplier {
+    id: ID!
+    name: String!
+    companyName: String!
+}
+
+type Shipper {
+    id: ID!
+    name: String!
+    companyName: String!
+    serviceArea: String
+}
+
+enum OrderStatus {
+    PENDING
+    PROCESSING
+    CONFIRMED
+    SHIPPED
+    DELIVERED
+    CANCELLED
+    REFUNDED
+    ERRORED
+}
+
+input OrderInput {
+    items: [OrderItemInput!]!
+    shipAddress: String!
+    shipCity: String!
+}
+
+input OrderItemInput {
+    productId: ID!
+    quantity: Int!
+} 
