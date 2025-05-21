@@ -8,8 +8,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,10 +22,16 @@ public class OrderService {
     private final OrderItemRepo orderItemRepo;
     private final EmailService emailService;
 
+    private static final int MAX_RETRIES = 3;
+
     @Transactional
-    public Order createOrder(Customer customer, List<OrderItem> items, String shipAddress, String shipCity) {
+    @Retryable(
+        value = { ObjectOptimisticLockingFailureException.class },
+        maxAttempts = MAX_RETRIES,
+        backoff = @Backoff(delay = 100, multiplier = 2)
+    )
+    public Order createOrder(List<OrderItem> items, String shipAddress, String shipCity) {
         Order order = Order.builder()
-                .customer(customer)
                 .shipAddress(shipAddress)
                 .shipCity(shipCity)
                 .status(OrderStatus.PENDING)
@@ -45,8 +52,11 @@ public class OrderService {
                 
                 productRepo.save(product);
             } catch (ObjectOptimisticLockingFailureException e) {
-                // Another transaction has modified the product, retry logic could be implemented here
-                throw new IllegalStateException("Product was modified by another transaction. Please retry.");
+                // Retry will be handled by @Retryable
+                throw e;
+            } catch (Exception e) {
+                // If any other error occurs, rollback the entire transaction
+                throw new IllegalStateException("Failed to process order: " + e.getMessage());
             }
         }
 
@@ -114,5 +124,14 @@ public class OrderService {
         emailService.sendOrderLocationUpdate(order);
         
         return order;
+    }
+
+    public Order getOrderById(Long id) {
+        return orderRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Order not found"));
+    }
+
+    public List<OrderItem> getAllOrders() {
+        return orderItemRepo.findAll();
     }
 }
