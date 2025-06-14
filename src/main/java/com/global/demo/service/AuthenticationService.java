@@ -86,7 +86,12 @@ public class AuthenticationService {
         }
 
         // Send verification email
-        emailService.sendVerificationEmail(user.getEmail(), user.getVerificationToken());
+        try {
+            emailService.sendVerificationEmail(user.getEmail(), user.getVerificationToken());
+        } catch (Exception e) {
+            // Log the error but don't fail the registration
+            System.err.println("Failed to send verification email: " + e.getMessage());
+        }
 
         try {
             userRepository.save(user);
