@@ -100,7 +100,9 @@ public class AuthenticationService {
         }
 
         return AuthResponse.builder().success(true)
-                .message("Registration successful. Please check your email to verify your account.").build();
+                .message("Registration successful. Please check your email to verify your account.")
+                .token(user.getVerificationToken())
+                .build();
     }
 
     public AuthResponse login(LoginRequest request) {
