@@ -29,4 +29,11 @@ public class Customer extends BaseRoleEntity {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Favorite> favorites;
+
+    public String getName() {
+        return this.getUser().getName();
+    }
+    public String getEmail() {
+        return this.getUser().getEmail();
+    }
 }

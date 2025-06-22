@@ -35,4 +35,8 @@ public class Shipper extends BaseRoleEntity {
 
     @OneToMany(mappedBy = "shipper", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Order> orders;
+
+    public String getName() {
+        return this.getUser().getName();
+    }
 }

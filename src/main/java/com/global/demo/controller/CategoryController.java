@@ -4,6 +4,7 @@ package com.global.demo.controller;
 import com.global.demo.entity.Category;
 import com.global.demo.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,13 +31,13 @@ public class CategoryController {
         return categoryService.getCategoryById(id);
     }
 
-    // @PutMapping("/{id}")
-    // public Category updateCategory(@PathVariable Long id, @RequestBody Category category) {
-    // return categoryService.updateCategory(id, category);
-    // }
-
     @DeleteMapping("/{id}")
+    @PreAuthorize("ADMIN")
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
     }
+   
+
+
+
 }
