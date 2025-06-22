@@ -4,6 +4,7 @@ import com.global.demo.dto.OrderRequest;
 import com.global.demo.entity.Customer;
 import com.global.demo.entity.Order;
 import com.global.demo.entity.OrderItem;
+import com.global.demo.entity.OrderStatus;
 import com.global.demo.entity.Product;
 import com.global.demo.service.OrderService;
 import jakarta.validation.Valid;
@@ -48,6 +49,61 @@ public class OrderController {
         }
     }
 
+    /**
+     * Get all orders for the authenticated customer
+     */
+    @GetMapping("/my-orders")
+    public ResponseEntity<List<Order>> getMyOrders(@AuthenticationPrincipal Customer customer) {
+        List<Order> orders = orderService.getOrdersByCustomerId(customer.getId());
+        return ResponseEntity.ok(orders);
+    }
+
+    /**
+     * Get orders for the authenticated customer with specific status
+     */
+    @GetMapping("/my-orders/status/{status}")
+    public ResponseEntity<List<Order>> getMyOrdersByStatus(
+            @AuthenticationPrincipal Customer customer,
+            @PathVariable OrderStatus status
+    ) {
+        List<Order> orders = orderService.getOrdersByCustomerIdAndStatus(customer.getId(), status);
+        return ResponseEntity.ok(orders);
+    }
+
+    /**
+     * Get a specific order by ID, ensuring it belongs to the authenticated customer
+     */
+    @GetMapping("/my-orders/{orderId}")
+    public ResponseEntity<Order> getMyOrder(
+            @AuthenticationPrincipal Customer customer,
+            @PathVariable Long orderId
+    ) {
+        try {
+            Order order = orderService.getOrderByIdAndCustomerId(orderId, customer.getId());
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Cancel an order, ensuring it belongs to the authenticated customer
+     */
+    @PostMapping("/my-orders/{orderId}/cancel")
+    public ResponseEntity<?> cancelMyOrder(
+            @AuthenticationPrincipal Customer customer,
+            @PathVariable Long orderId
+    ) {
+        try {
+            Order order = orderService.getOrderByIdAndCustomerId(orderId, customer.getId());
+            orderService.cancelOrder(order);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // Legacy endpoint for backward compatibility (admin use only)
     @PostMapping("/{orderId}/cancel")
     public ResponseEntity<?> cancelOrder(
             @AuthenticationPrincipal Customer customer,
