@@ -2,6 +2,7 @@ package com.global.demo.service;
 
 import com.global.demo.entity.*;
 import com.global.demo.repository.OrderItemRepo;
+import com.global.demo.repository.OrderRepository;
 import com.global.demo.repository.ProductRepo;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -21,7 +22,7 @@ public class OrderService {
     private final ProductRepo productRepo;
     private final OrderItemRepo orderItemRepo;
     private final EmailService emailService;
-
+    private final OrderRepository orderRepo;
     private static final int MAX_RETRIES = 3;
 
     @Transactional
@@ -30,8 +31,9 @@ public class OrderService {
         maxAttempts = MAX_RETRIES,
         backoff = @Backoff(delay = 100, multiplier = 2)
     )
-    public Order createOrder(List<OrderItem> items, String shipAddress, String shipCity) {
+    public Order createOrder(Customer customer, List<OrderItem> items, String shipAddress, String shipCity) {
         Order order = Order.builder()
+                .customer(customer)
                 .shipAddress(shipAddress)
                 .shipCity(shipCity)
                 .status(OrderStatus.PENDING)
@@ -61,7 +63,7 @@ public class OrderService {
         }
 
         order.setStatus(OrderStatus.CONFIRMED);
-        return order;
+        return orderRepo.save(order);
     }
 
     @Transactional 
@@ -84,6 +86,7 @@ public class OrderService {
     
 
         order.setStatus(OrderStatus.CANCELLED);
+        orderRepo.save(order);
     }
     
     /**
@@ -101,7 +104,7 @@ public class OrderService {
         // Send email notification to customer
         emailService.sendOrderLocationUpdate(order);
         
-        return order;
+        return orderRepo.save(order);
     }
     
     /**
@@ -123,15 +126,55 @@ public class OrderService {
         // Send email notification to customer
         emailService.sendOrderLocationUpdate(order);
         
-        return order;
+        return orderRepo.save(order);
+    }
+
+    /**
+     * Get all orders for a specific customer
+     * 
+     * @param customerId The ID of the customer
+     * @return List of orders belonging to the customer
+     */
+    public List<Order> getOrdersByCustomerId(Long customerId) {
+        return orderRepo.findByCustomerId(customerId);
+    }
+    
+    /**
+     * Get orders for a specific customer with the given status
+     * 
+     * @param customerId The ID of the customer
+     * @param status The order status to filter by
+     * @return List of orders belonging to the customer with the specified status
+     */
+    public List<Order> getOrdersByCustomerIdAndStatus(Long customerId, OrderStatus status) {
+        return orderRepo.findByCustomerIdAndStatus(customerId, status);
+    }
+    
+    /**
+     * Get a specific order by ID, ensuring it belongs to the customer
+     * 
+     * @param orderId The ID of the order
+     * @param customerId The ID of the customer
+     * @return The order if it belongs to the customer
+     * @throws EntityNotFoundException if the order doesn't exist or doesn't belong to the customer
+     */
+    public Order getOrderByIdAndCustomerId(Long orderId, Long customerId) {
+        return orderRepo.findByOrderIdAndCustomerId(orderId, customerId)
+                .orElseThrow(() -> new EntityNotFoundException("Order not found or access denied"));
+    }
+
+    // Legacy methods for backward compatibility (admin use only)
+    public List<OrderItem> getAllOrders() {
+        return orderItemRepo.findAll();
+    }
+
+    public OrderItem getOrderItemById(Long id) {
+        return orderItemRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Order item not found"));
     }
 
     public Order getOrderById(Long id) {
         return orderRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found"));
-    }
-
-    public List<OrderItem> getAllOrders() {
-        return orderItemRepo.findAll();
     }
 }
