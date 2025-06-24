@@ -5,6 +5,7 @@ import com.global.demo.dto.AuthResponse;
 import com.global.demo.dto.LoginRequest;
 import com.global.demo.dto.RegisterRequest;
 import com.global.demo.repository.*;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -127,13 +129,22 @@ public class AuthenticationService {
     }
 
     public AuthResponse verifyEmail(String token) {
-        var user = userRepository.findByVerificationToken(token)
-                .orElseThrow(() -> new RuntimeException("Invalid verification token"));
+        try {
 
-        user.setEnabled(true);
-        user.setVerificationToken(null);
-        userRepository.save(user);
+            Claims claims = jwtService.extractAllClaims(token);
 
-        return AuthResponse.builder().success(true).message("Email verified successfully").build();
-    }
+
+            if (claims.getExpiration().before(new Date())) {
+                throw new RuntimeException("Token has expired");
+            }
+
+            return AuthResponse.builder()
+                    .success(true)
+                    .message("Token is valid")
+                    .build();
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid token");
+        }
+
+          }
 }
