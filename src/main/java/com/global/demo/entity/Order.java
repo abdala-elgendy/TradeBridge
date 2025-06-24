@@ -33,7 +33,10 @@ public class Order {
     @Column(nullable = false)
     private LocalDateTime orderDate;
 
+    @Column(nullable = false)
     private LocalDateTime requiredDate;
+
+    @Column
     private LocalDateTime shippedDate;
 
     @Column(nullable = false)
@@ -43,11 +46,15 @@ public class Order {
     @Column(nullable = false)
     private OrderStatus status = OrderStatus.PENDING;
 
+    @Column(nullable = false)
     private String shipAddress;
+    @Column(nullable = false)
     private String shipCity;
     
     // Location tracking information
+    @Column
     private String currentLocation;
+    @Column
     private LocalDateTime lastLocationUpdate;
 
     @ManyToOne

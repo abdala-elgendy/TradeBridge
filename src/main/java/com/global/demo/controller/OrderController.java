@@ -6,6 +6,7 @@ import com.global.demo.entity.Order;
 import com.global.demo.entity.OrderItem;
 import com.global.demo.entity.OrderStatus;
 import com.global.demo.entity.Product;
+import com.global.demo.entity.User;
 import com.global.demo.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,11 @@ public class OrderController {
      * Get all orders for the authenticated customer
      */
     @GetMapping("/my-orders")
-    public ResponseEntity<List<Order>> getMyOrders(@AuthenticationPrincipal Customer customer) {
+    public ResponseEntity<List<Order>> getMyOrders(@AuthenticationPrincipal User user) {
+        Customer customer = user.getCustomer();
+        if (customer == null) {
+            return ResponseEntity.status(403).build();
+        }
         List<Order> orders = orderService.getOrdersByCustomerId(customer.getId());
         return ResponseEntity.ok(orders);
     }
@@ -63,9 +68,13 @@ public class OrderController {
      */
     @GetMapping("/my-orders/status/{status}")
     public ResponseEntity<List<Order>> getMyOrdersByStatus(
-            @AuthenticationPrincipal Customer customer,
+            @AuthenticationPrincipal User user,
             @PathVariable OrderStatus status
     ) {
+        Customer customer = user.getCustomer();
+        if (customer == null) {
+            return ResponseEntity.status(403).build();
+        }
         List<Order> orders = orderService.getOrdersByCustomerIdAndStatus(customer.getId(), status);
         return ResponseEntity.ok(orders);
     }
@@ -75,9 +84,13 @@ public class OrderController {
      */
     @GetMapping("/my-orders/{orderId}")
     public ResponseEntity<Order> getMyOrder(
-            @AuthenticationPrincipal Customer customer,
+            @AuthenticationPrincipal User user,
             @PathVariable Long orderId
     ) {
+        Customer customer = user.getCustomer();
+        if (customer == null) {
+            return ResponseEntity.status(403).build();
+        }
         try {
             Order order = orderService.getOrderByIdAndCustomerId(orderId, customer.getId());
             return ResponseEntity.ok(order);
@@ -91,9 +104,13 @@ public class OrderController {
      */
     @PostMapping("/my-orders/{orderId}/cancel")
     public ResponseEntity<?> cancelMyOrder(
-            @AuthenticationPrincipal Customer customer,
+            @AuthenticationPrincipal User user,
             @PathVariable Long orderId
     ) {
+        Customer customer = user.getCustomer();
+        if (customer == null) {
+            return ResponseEntity.status(403).build();
+        }
         try {
             Order order = orderService.getOrderByIdAndCustomerId(orderId, customer.getId());
             orderService.cancelOrder(order);
@@ -106,7 +123,7 @@ public class OrderController {
     // Legacy endpoint for backward compatibility (admin use only)
     @PostMapping("/{orderId}/cancel")
     public ResponseEntity<?> cancelOrder(
-            @AuthenticationPrincipal Customer customer,
+            @AuthenticationPrincipal User user,
             @PathVariable Long orderId
     ) {
         try {
