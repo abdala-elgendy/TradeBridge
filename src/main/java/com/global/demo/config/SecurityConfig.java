@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/orders/my-orders/**").hasRole("CUSTOMER")
                         .requestMatchers("/api/orders").hasRole("CUSTOMER")
                         .requestMatchers("/api/orders/**").hasAnyRole("ADMIN", "CUSTOMER")
+                        .requestMatchers("/api/orders/graphql/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
