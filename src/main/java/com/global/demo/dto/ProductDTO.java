@@ -56,6 +56,13 @@ public class ProductDTO {
     private Double averageRating;
     private Integer totalReviews;
 
+    public ProductDTO(BigDecimal price, Integer stockQuantity, String name, String description) {
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.name = name;
+        this.description = description;
+    }
+
     // Thread-safe methods for updating stock and total sold
     public synchronized boolean updateStock(int quantity) {
         if (quantity > 0 && this.stockQuantity >= quantity) {
