@@ -1,6 +1,7 @@
 // src/main/java/com/global/demo/controller/FavoriteController.java
 package com.global.demo.controller;
 
+import com.global.demo.dto.ProductDTO;
 import com.global.demo.entity.Favorite;
 import com.global.demo.entity.User;
 import com.global.demo.service.FavoriteService;
@@ -23,8 +24,9 @@ public class FavoriteController {
     }
 
     @GetMapping("/allmyfavorites")
-    public List<Favorite> getAllFavorites(@AuthenticationPrincipal User user) {
-        return favoriteService.getAllFavorites();
+    public List<ProductDTO> getAllFavorites(@AuthenticationPrincipal User user) {
+       // System.out.println(user.getEmail());
+        return favoriteService.getAllFavorites(user.getEmail());
     }
 
     @GetMapping("/{id}")
