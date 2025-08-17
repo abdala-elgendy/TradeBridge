@@ -2,12 +2,14 @@ package com.global.demo.controller;
 
 import com.global.demo.dto.ProductDTO;
 import com.global.demo.dto.TopProductDTO;
+import com.global.demo.entity.User;
 import com.global.demo.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -93,4 +95,12 @@ public class ProductController {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(e.getMessage());
     }
+
+    @GetMapping("/top-rated")
+    public ResponseEntity<List<ProductDTO>> getTopRatedProducts(@AuthenticationPrincipal User user
+    ,@RequestParam(defaultValue = "4") int limit){
+       List<ProductDTO> topRatedProduct = productService.getTopRatedProducts(limit);
+        return ResponseEntity.ok(topRatedProduct);
+    }
+
 }

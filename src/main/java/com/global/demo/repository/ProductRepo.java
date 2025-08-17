@@ -37,4 +37,9 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
     )
 """)
     List<ProductDTO> getFavorites(@Param("email") String email);
+
+    @Query("    SELECT new com.global.demo.dto.ProductDTO(\n" +
+            "      p.price,p.stockQuantity,p.name,p.description) \n" +
+            "    FROM Product p ORDER BY p.rate DESC limit :limit")
+    List<ProductDTO> findTopRatedProducts(int limit);
 }

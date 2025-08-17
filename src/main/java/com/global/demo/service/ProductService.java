@@ -4,6 +4,7 @@ package com.global.demo.service;
 import com.global.demo.dto.ProductDTO;
 import com.global.demo.dto.TopProductDTO;
 import com.global.demo.entity.Product;
+import com.global.demo.entity.User;
 import com.global.demo.mapper.ProductMapper;
 import com.global.demo.repository.ProductRepo;
 import lombok.RequiredArgsConstructor;
@@ -142,5 +143,15 @@ public class ProductService {
 
     public List<TopProductDTO> getTopSellingProducts(int limit) {
         return productRepository.findTopSellingProducts(limit);
+    }
+
+    public List<ProductDTO> getTopRatedProducts(int limit) {
+        List<ProductDTO> topRatedProducts = productRepository.findTopRatedProducts(limit);
+        if (topRatedProducts.isEmpty()) {
+            return null; // or throw an exception
+        }
+
+        return topRatedProducts;
+
     }
 }
