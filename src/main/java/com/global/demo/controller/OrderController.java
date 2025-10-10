@@ -38,7 +38,6 @@ public class OrderController {
                     .collect(Collectors.toList());
 
             Order order = orderService.createOrder(
-                    customer,
                     orderItems,
                     orderRequest.getShipAddress(),
                     orderRequest.getShipCity()
@@ -50,9 +49,64 @@ public class OrderController {
         }
     }
 
-    /**
-     * Get all orders for the authenticated customer
-     */
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<Order> getOrderById(@PathVariable Long orderId) {
+        try {
+            Order order = orderService.getOrderById(orderId);
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<Order>> getOrdersByCustomer(@PathVariable Long customerId) {
+        List<Order> orders = orderService.getOrdersByCustomerId(customerId);
+        return ResponseEntity.ok(orders);
+    }
+
+
+    @GetMapping("/customer/{customerId}/status/{status}")
+    public ResponseEntity<List<Order>> getOrdersByCustomerAndStatus(
+            @PathVariable Long customerId,
+            @PathVariable OrderStatus status
+    ) {
+        List<Order> orders = orderService.getOrdersByCustomerIdAndStatus(customerId, status);
+        return ResponseEntity.ok(orders);
+    }
+
+
+    @PatchMapping("/{orderId}/status")
+    public ResponseEntity<Order> updateOrderStatus(
+            @PathVariable Long orderId,
+            @RequestParam OrderStatus status
+    ) {
+        try {
+            Order order = orderService.getOrderById(orderId);
+            Order updated = orderService.updateOrderStatus(order, status);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+
+    @PatchMapping("/{orderId}/location")
+    public ResponseEntity<Order> updateOrderLocation(
+            @PathVariable Long orderId,
+            @RequestParam String location
+    ) {
+        try {
+            Order order = orderService.getOrderById(orderId);
+            Order updated = orderService.updateOrderLocation(order, location);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+
     @GetMapping("/my-orders")
     public ResponseEntity<List<Order>> getMyOrders(@AuthenticationPrincipal User user) {
         Customer customer = user.getCustomer();
@@ -63,9 +117,7 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    /**
-     * Get orders for the authenticated customer with specific status
-     */
+
     @GetMapping("/my-orders/status/{status}")
     public ResponseEntity<List<Order>> getMyOrdersByStatus(
             @AuthenticationPrincipal User user,
