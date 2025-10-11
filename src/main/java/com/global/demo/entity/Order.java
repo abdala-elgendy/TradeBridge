@@ -4,6 +4,7 @@ import com.global.demo.entity.Customer;
 import com.global.demo.entity.Shipper;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,17 +18,26 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "orders")
+@Table(name = "orders", indexes = {
+    @Index(name = "idx_order_customer", columnList = "customerId"),
+    @Index(name = "idx_order_status", columnList = "status"),
+    @Index(name = "idx_order_date", columnList = "orderDate"),
+    @Index(name = "idx_order_shipper", columnList = "shipper_id"),
+    @Index(name = "idx_order_customer_date", columnList = "customerId, orderDate"),
+    @Index(name = "idx_order_status_date", columnList = "status, orderDate"),
+    @Index(name = "idx_order_total_amount", columnList = "totalAmount")
+})
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerId")
     private Customer customer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @BatchSize(size = 50)  // Optimize batch loading for order items
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @Column(nullable = false)

@@ -3,12 +3,18 @@ package com.global.demo.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.List;
 
 @Data
 @Entity
-@Table(name = "customers")
+@Table(name = "customers", indexes = {
+    @Index(name = "idx_customer_user", columnList = "user_id"),
+    @Index(name = "idx_customer_active", columnList = "is_active"),
+    @Index(name = "idx_customer_created_at", columnList = "created_at"),
+    @Index(name = "idx_customer_loyalty_points", columnList = "loyalty_points")
+})
 @EqualsAndHashCode(callSuper = true)
 public class Customer extends BaseRoleEntity {
 
@@ -24,10 +30,12 @@ public class Customer extends BaseRoleEntity {
     @Column(name = "loyalty_points")
     private Integer loyaltyPoints = 0;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @BatchSize(size = 50)  // Optimize batch loading for orders
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @BatchSize(size = 50)  // Optimize batch loading for favorites
     private List<Favorite> favorites;
 
     public String getName() {
