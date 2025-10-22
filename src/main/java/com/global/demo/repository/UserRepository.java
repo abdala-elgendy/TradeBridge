@@ -10,14 +10,24 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    
-    @Query("SELECT u FROM User u LEFT JOIN FETCH u.customer LEFT JOIN FETCH u.supplier LEFT JOIN FETCH u.shipper LEFT JOIN FETCH u.admin WHERE u.email = :email")
-    Optional<User> findByEmail(@Param("email") String email);
+
+    @Query("SELECT u FROM User u WHERE u.email = :email")
+    Optional<User> findByEmailForAuthentication(@Param("email") String email);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.customer WHERE u.email = :email")
+    Optional<User> findByEmailWithCustomer(@Param("email") String email);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.supplier WHERE u.email = :email")
+    Optional<User> findByEmailWithSupplier(@Param("email") String email);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.shipper WHERE u.email = :email")
+    Optional<User> findByEmailWithShipper(@Param("email") String email);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.admin WHERE u.email = :email")
+    Optional<User> findByEmailWithAdmin(@Param("email") String email);
+
 
     boolean existsByEmail(String email);
 
     boolean existsByNationalId(String nationalId);
-
-    @Query("SELECT u FROM User u LEFT JOIN FETCH u.customer LEFT JOIN FETCH u.supplier LEFT JOIN FETCH u.shipper LEFT JOIN FETCH u.admin WHERE u.verificationToken = :token")
-    Optional<User> findByVerificationToken(@Param("token") String token);
 }

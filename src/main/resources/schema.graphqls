@@ -3,6 +3,8 @@ type Query {
     order(id: ID!): Order
     products: [Product]
     product(id: ID!): Product
+    ordersByCustomer(customerId: ID!): [Order]
+    GetOrder(id: ID!): Order
 }
 
 type Mutation {
