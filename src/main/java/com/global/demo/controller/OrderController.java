@@ -10,6 +10,8 @@ import com.global.demo.entity.User;
 import com.global.demo.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,20 +25,21 @@ import java.util.stream.Collectors;
 public class OrderController {
 
     private final OrderService orderService;
-
+    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
     @PostMapping
     public ResponseEntity<?> createOrder(
             @AuthenticationPrincipal Customer customer,
             @Valid @RequestBody OrderRequest orderRequest
     ) {
         try {
+
             List<OrderItem> orderItems = orderRequest.getItems().stream()
                     .map(item -> OrderItem.builder()
                             .product(Product.builder().id(item.getProductId()).build())
                             .quantity(item.getQuantity())
                             .build())
                     .collect(Collectors.toList());
-
+            logger.info("Creating order for customer ID: {}", customer.getId());
             Order order = orderService.createOrder(
                     customer,
                     orderItems,
@@ -55,10 +58,12 @@ public class OrderController {
      */
     @GetMapping("/my-orders")
     public ResponseEntity<List<Order>> getMyOrders(@AuthenticationPrincipal User user) {
+      logger.info("find the user  {}", user.getUsername());
         Customer customer = user.getCustomer();
         if (customer == null) {
             return ResponseEntity.status(403).build();
         }
+        logger.info("Fetching orders for user ID: {}", user.getId());
         List<Order> orders = orderService.getOrdersByCustomerId(customer.getId());
         return ResponseEntity.ok(orders);
     }
@@ -71,6 +76,7 @@ public class OrderController {
             @AuthenticationPrincipal User user,
             @PathVariable OrderStatus status
     ) {
+
         Customer customer = user.getCustomer();
         if (customer == null) {
             return ResponseEntity.status(403).build();
@@ -142,6 +148,7 @@ public class OrderController {
             @RequestParam int status
     ) {
         try {
+            logger.info("Updating order ID: {} to status: {}", orderId, "SHIPPED");
             Order order = orderService.updateOrderStatus(
                     Order.builder().orderId(orderId).build(),
                     OrderStatus.SHIPPED
