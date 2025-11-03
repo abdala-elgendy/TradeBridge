@@ -19,15 +19,15 @@ public class UserService {
      */
     @Transactional(readOnly = true)
     public Optional<User> findUserWithRoles(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailForAuthentication(email);
     }
     
     /**
      * Loads a user by verification token with all related entities
      */
-    @Transactional(readOnly = true)
-    public Optional<User> findUserByTokenWithRoles(String token) {
-        return userRepository.findByVerificationToken(token);
-    }
+//    @Transactional(readOnly = true)
+//    public Optional<User> findUserByTokenWithRoles(String token) {
+//       return userRepository.findByVerificationToken(token);
+//    }
 }
 

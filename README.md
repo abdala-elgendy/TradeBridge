@@ -93,6 +93,64 @@ Contributions are welcome! Fork this repo, create a branch, and submit a pull re
 
 ---
 
+## 📚 Learning Resources & Improvement Roadmap
+
+This project includes a comprehensive backend learning roadmap to deepen your knowledge and apply various advanced topics.
+
+### 🎯 Getting Started with Improvements
+
+1. **New to the project?** Start here:
+   - Read [TOPIC_PRIORITY_GUIDE.md](./TOPIC_PRIORITY_GUIDE.md) to choose your learning path
+   - Follow [QUICK_START_IMPLEMENTATION.md](./QUICK_START_IMPLEMENTATION.md) for hands-on tutorials
+
+2. **Ready for advanced topics?**
+   - See [BACKEND_IMPROVEMENTS_ROADMAP.md](./BACKEND_IMPROVEMENTS_ROADMAP.md) for 12 comprehensive topics
+   - Each topic includes: why, what, how, and code examples
+
+### 📖 Available Topics
+
+**Phase 1: Foundation & Quality (Weeks 1-4)**
+1. ✅ Comprehensive Logging & Monitoring
+2. ✅ API Documentation with Swagger
+3. ✅ Global Exception Handling
+4. ✅ Testing Strategy (Unit, Integration, E2E)
+
+**Phase 2: Performance & Scalability (Weeks 5-8)**
+5. ✅ Caching Strategy with Redis
+6. ✅ Asynchronous Processing with Message Queues
+7. ✅ API Rate Limiting
+8. ✅ Circuit Breaker Pattern with Resilience4j
+
+**Phase 3: Advanced Architecture (Weeks 9-12)**
+9. ✅ Distributed Tracing with Zipkin
+10. ✅ Containerization with Docker
+11. ✅ CI/CD Pipeline with GitHub Actions
+12. ✅ Advanced Security Features (OAuth2, 2FA)
+
+### 🎓 Learning Approach
+
+Each topic in the roadmap includes:
+- **Why**: Business value and use cases
+- **What**: Concepts and patterns
+- **How**: Step-by-step implementation guide
+- **Code**: Complete working examples
+- **Resources**: Links to documentation and tutorials
+
+### 💡 Quick Wins to Start Today
+
+Implement these 4 topics in ~2 weeks for immediate impact:
+
+```bash
+# 1. Comprehensive Logging (2-3 hours)
+# 2. Swagger API Documentation (2-3 hours)  
+# 3. Global Exception Handling (3-4 hours)
+# 4. Basic Testing Suite (5-8 hours)
+```
+
+See [QUICK_START_IMPLEMENTATION.md](./QUICK_START_IMPLEMENTATION.md) for detailed steps.
+
+---
+
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).

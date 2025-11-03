@@ -25,6 +25,7 @@ public class OrderService {
     private final OrderRepository orderRepo;
     private static final int MAX_RETRIES = 3;
 
+
     @Transactional
     @Retryable(
         value = { ObjectOptimisticLockingFailureException.class },
@@ -102,7 +103,7 @@ public class OrderService {
         order.setLastLocationUpdate(LocalDateTime.now());
         
         // Send email notification to customer
-        emailService.sendOrderLocationUpdate(order);
+    //    emailService.sendOrderLocationUpdate(order);
         
         return orderRepo.save(order);
     }

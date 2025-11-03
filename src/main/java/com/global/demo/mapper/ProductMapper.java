@@ -20,5 +20,5 @@ public interface ProductMapper {
 
     List<ProductDTO> toProductDTOList(List<Product> all);
 
-    List<TopProductDTO> findTopSellingProducts(int limit);
+  //  List<TopProductDTO> findTopSellingProducts(int limit);
 }

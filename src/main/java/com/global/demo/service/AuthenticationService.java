@@ -112,7 +112,7 @@ public class AuthenticationService {
             authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
-            var user = userRepository.findByEmail(request.getEmail())
+            var user = userRepository.findByEmailForAuthentication(request.getEmail())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             if (!user.isEnabled()) {

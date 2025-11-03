@@ -24,27 +24,24 @@ public class OrderResolver implements GraphQLQueryResolver, GraphQLMutationResol
         return orderService.getAllOrders();
     }
 
-    public OrderItem order(Long id) {
-        return orderService.getOrderById(id);
-    }
 
-    @PreAuthorize("hasRole('CUSTOMER')")
-    public Order createOrder(OrderInput input) {
-        return orderService.createOrder(
-            input.getItems().stream()
-                .map(item -> OrderItem.builder()
-                    .product(Product.builder().id(item.getProductId()).build())
-                    .quantity(item.getQuantity())
-                    .build())
-                .collect(Collectors.toList()),
-            input.getShipAddress(),
-            input.getShipCity()
-        );
-    }
+//    @PreAuthorize("hasRole('CUSTOMER')")
+//    public Order createOrder(OrderInput input) {
+//        return orderService.createOrder(
+//            input.getItems().stream()
+//                .map(item -> OrderItem.builder()
+//                    .product(Product.builder().id(item.getProductId()).build())
+//                    .quantity(item.getQuantity())
+//                    .build())
+//                .collect(Collectors.toList()),
+//            input.getShipAddress(),
+//            input.getShipCity()
+//        );
+//    }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SHIPPER')")
-    public OrderItem updateOrderStatus(Long id, OrderStatus status) {
-        OrderItem order = orderService.getOrderById(id);
+    public Order updateOrderStatus(Long id, OrderStatus status) {
+        Order order = orderService.getOrderById(id);
         return orderService.updateOrderStatus(order, status);
     }
 

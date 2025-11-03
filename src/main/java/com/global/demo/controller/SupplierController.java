@@ -38,7 +38,7 @@ public class SupplierController {
     // }
 
     @DeleteMapping("/{id}")
-    public void deleteSupplier(@AuthenticationPrincipal User user, @PathVariable Long id) {
+    public void deleteSupplier(@AuthenticationPrincipal Supplier user, @PathVariable Long id) {
         supplierService.deleteSupplier(id);
     }
 }
